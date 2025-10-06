@@ -1,0 +1,63 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div class="container my-5">
+    <h2>Your Cart</h2>
+    {% if cart_items %}
+    <table class="table table-bordered align-middle">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>₹{{ item.product.price }}</td>
+                <td class="d-flex align-items-center gap-2">
+                    <!-- Decrement button -->
+                    <form method="POST" action="{% url 'decrement_cart_item' item.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-secondary">-</button>
+                    </form>
+
+                    <!-- Quantity display -->
+                    <span>{{ item.quantity }}</span>
+
+                    <!-- Increment button -->
+                    <form method="POST" action="{% url 'increment_cart_item' item.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-outline-secondary">+</button>
+                    </form>
+                </td>
+                <td>₹{{ item.subtotal }}</td>
+                <td>
+                    <!-- Remove button -->
+                    <form method="POST" action="{% url 'remove_cart_item' item.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-end flex-column align-items-end mt-3">
+        <h4>Subtotal: ₹{{ total }}</h4>
+        <h4>GST (18%): ₹{{ gst_amount }}</h4>
+        <h3>Total: ₹{{ grand_total }}</h3>
+        <a href="{% url 'checkout' %}" class="btn btn-success mt-3">Proceed to Checkout</a>
+    </div>
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
