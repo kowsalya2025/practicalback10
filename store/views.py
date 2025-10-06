@@ -230,3 +230,18 @@ def remove_cart_item(request, item_id):
     item.delete()
     return redirect('cart')
 
+def get_or_create_cart(request):
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+    else:
+        # Guest users: use session
+        cart_id = request.session.get('cart_id')
+        if cart_id:
+            cart = Cart.objects.filter(id=cart_id).first()
+            if not cart:
+                cart = Cart.objects.create()
+                request.session['cart_id'] = cart.id
+        else:
+            cart = Cart.objects.create()
+            request.session['cart_id'] = cart.id
+    return cart
