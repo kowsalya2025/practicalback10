@@ -31,13 +31,13 @@
         </tr>
     </thead>
     <tbody>
-        {% for item in order_items %}
+        {% for i in order_items %}
         <tr>
-            <td>{{ item.product.name }}</td>
-            <td>₹{{ item.price }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.gst_rate }}</td>
-            <td>₹{{ item.subtotal }}</td>
+            <td>{{ i.item.product.name }}</td>
+            <td>₹{{ i.item.price }}</td>
+            <td>{{ i.item.quantity }}</td>
+            <td>{{ i.item.gst_rate }}</td>
+            <td>₹{{ i.subtotal }}</td>
         </tr>
         {% endfor %}
         <tr class="total-row">
@@ -52,4 +52,5 @@
 </table>
 </body>
 </html>
+
 
